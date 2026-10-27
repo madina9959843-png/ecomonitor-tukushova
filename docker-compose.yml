@@ -1,0 +1,11 @@
+services:
+  ecomonitor:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      ECOMONITOR_ADMIN_PASSWORD: ${ECOMONITOR_ADMIN_PASSWORD:-}
+      ECOMONITOR_SESSION_SECRET: ${ECOMONITOR_SESSION_SECRET:-local-dev-secret-change-me}
+      ECOMONITOR_SECURE_COOKIES: "false"
+      ECOMONITOR_RESET_ON_START: "false"
+      ECOMONITOR_DB: /tmp/eco_monitor.db
