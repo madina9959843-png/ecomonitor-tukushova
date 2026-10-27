@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoMonitor — интеллектуальный модуль</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand-block">
+      <div class="brand-icon">◢</div>
+      <div>
+        <div class="brand-title">EcoMonitor</div>
+        <div class="brand-sub" data-i18n="brand_sub">Атмосферный мониторинг</div>
+      </div>
+    </div>
+    <nav class="side-nav">
+      <button class="nav-item active" data-page="dashboard">⌂ <span data-i18n="nav_home">Главная</span></button>
+      <button class="nav-item" data-page="anomalies">⚠ <span data-i18n="nav_anomalies">Аномалии</span></button>
+      <button class="nav-item" data-page="events">▣ <span data-i18n="nav_events">События</span></button>
+      <button class="nav-item" data-page="analytics">▥ <span data-i18n="nav_analytics">Аналитика</span></button>
+      <button class="nav-item" data-page="api">⌘ <span>API</span></button>
+      <button class="nav-item" data-page="settings">⚙ <span data-i18n="nav_settings">Настройки</span></button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-slogan" data-i18n="tagline">Чистый воздух<br>для устойчивого будущего</div>
+      <div class="sidebar-version"><span data-i18n="version">Версия</span> 1.5.0</div>
+      <div class="sidebar-chip" data-i18n="ready_module">Интеллектуальный модуль</div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="ghost-btn burger">☰</button>
+        <span class="top-chip" data-i18n="ready_module">Интеллектуальный модуль</span>
+      </div>
+      <div class="topbar-right">
+        <div class="lang-switch">
+          <button class="lang-btn active" data-lang="ru">RU</button>
+          <button class="lang-btn" data-lang="kk">KZ</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <div class="top-status"><span id="clock"></span><span class="green-dot"></span><span data-i18n="system_running">Система в работе</span></div>
+        <div class="access-pill" id="accessPill"><span class="access-dot public"></span><span id="accessLabel">Публичный доступ</span></div>
+        <button id="adminLoginBtn" class="secondary compact-btn" type="button">Войти</button>
+        <button id="adminLogoutBtn" class="secondary compact-btn hidden" type="button">Выйти</button>
+      </div>
+    </header>
+
+    <section class="page-head">
+      <div>
+        <h1 data-i18n="main_title">Интеллектуальный модуль экологического мониторинга атмосферы</h1>
+        <p id="pageSubtitle">Главная панель мониторинга</p>
+      </div>
+      <div class="page-head-actions">
+        <div class="range-box">
+          <span>🗓</span>
+          <div><span id="rangeLabel">—</span><small data-i18n="period_hint">Рабочий период</small></div>
+        </div>
+        <div class="upload-box admin-only hidden-by-auth" id="adminUploadBox">
+          <input id="csvFile" class="file-input-hidden" type="file" accept=".csv" />
+          <button id="chooseFileBtn" class="file-choose secondary" type="button" data-i18n="choose_file">Выбрать файл</button>
+          <span id="fileName" class="file-name">Файл не выбран</span>
+          <button id="uploadBtn" data-i18n="upload_csv">Загрузить CSV</button>
+          <button id="demoBtn" class="secondary" data-i18n="demo_data">Демоданные</button>
+        </div>
+      </div>
+    </section>
+    <div id="notice" class="notice hidden"></div>
+
+    <section id="page-dashboard" class="page active"></section>
+    <section id="page-anomalies" class="page"></section>
+    <section id="page-events" class="page"></section>
+    <section id="page-analytics" class="page"></section>
+    <section id="page-api" class="page">
+      <div class="card api-card">
+        <h3>REST API</h3>
+        <p data-i18n-html="api_docs">Интерактивная документация FastAPI доступна по адресу <a href="/docs" target="_blank">/docs</a>.</p>
+        <code>GET /api/options</code>
+        <code>GET /api/summary</code>
+        <code>GET /api/analytics</code>
+        <code>GET /api/anomalies</code>
+        <code>GET /api/anomalies/{event_id}</code>
+        <code>POST /api/upload</code>
+      </div>
+    </section>
+    <section id="page-settings" class="page">
+      <div class="card">
+        <h3 data-i18n="module_settings">Настройки модуля</h3>
+        <p data-i18n="settings_text">База данных по умолчанию: SQLite. Для демонстрации и проверки предусмотрен встроенный набор из 15 000 синтетических записей.</p>
+        <div class="public-mode-card" id="publicModeCard">
+          <strong data-i18n="public_mode_title">Публичный режим</strong>
+          <p data-i18n="public_mode_text">Просмотр данных открыт всем посетителям. Изменение базы доступно только после входа администратора.</p>
+          <button id="settingsLoginBtn" class="secondary" type="button" data-i18n="admin_login">Вход администратора</button>
+        </div>
+        <div class="settings-actions admin-only hidden-by-auth" id="adminSettingsActions">
+          <button id="resetBtn" data-i18n="reset_demo">Восстановить демонстрационные данные</button>
+          <a href="/api/download-demo" class="button secondary" data-i18n="download_csv">Скачать пример CSV</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="adminModal" class="modal hidden" aria-hidden="true">
+  <div class="modal-backdrop" data-close-admin-modal></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+    <button class="modal-close" id="adminModalClose" type="button">×</button>
+    <h3 id="adminModalTitle" data-i18n="admin_login">Вход администратора</h3>
+    <p class="muted" data-i18n="admin_login_help">Введите пароль администратора. Публичные посетители могут только просматривать данные.</p>
+    <form id="adminLoginForm">
+      <label class="modal-label" for="adminPassword" data-i18n="password">Пароль</label>
+      <input id="adminPassword" type="password" autocomplete="current-password" required />
+      <div id="adminLoginError" class="login-error hidden"></div>
+      <button type="submit" class="modal-submit" data-i18n="login">Войти</button>
+    </form>
+  </div>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
